@@ -3,6 +3,20 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django.utils import timezone
 
 
+class Present(models.Model):
+
+    item_link = models.TextField(blank=True, null=True)
+    name = models.CharField(max_length=500)
+    cost = models.PositiveIntegerField(default=0)
+    image_link = models.TextField(blank=True, null=True)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        db_table = 'table_present'
+
+
 class OBUserManager(BaseUserManager):
 
     def create_user(self, email=None, password=None, **extra_fields):
@@ -49,5 +63,5 @@ class OBUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
 
     class Meta:
-        db_table = 'ob_user'
+        db_table = 'table_user'
         verbose_name = 'User'

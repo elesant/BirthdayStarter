@@ -1,5 +1,5 @@
 from django.contrib import admin
-from core.models import OBUser
+from core.models import OBUser, Present
 from django.contrib.sessions.models import Session
 
 
@@ -25,4 +25,5 @@ class OBUserAdmin(admin.ModelAdmin):
 
 
 admin.site.register(OBUser, OBUserAdmin)
+admin.site.register(Present)
 admin.site.register(Session)

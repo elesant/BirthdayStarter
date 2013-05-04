@@ -8,8 +8,18 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding model 'Present'
+        db.create_table('table_present', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('item_link', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=500)),
+            ('cost', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
+            ('image_link', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+        ))
+        db.send_create_signal(u'core', ['Present'])
+
         # Adding model 'OBUser'
-        db.create_table('ob_user', (
+        db.create_table('table_user', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('password', self.gf('django.db.models.fields.CharField')(max_length=128)),
             ('last_login', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
@@ -24,31 +34,34 @@ class Migration(SchemaMigration):
         db.send_create_signal(u'core', ['OBUser'])
 
         # Adding M2M table for field groups on 'OBUser'
-        db.create_table('ob_user_groups', (
+        db.create_table('table_user_groups', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('obuser', models.ForeignKey(orm[u'core.obuser'], null=False)),
             ('group', models.ForeignKey(orm[u'auth.group'], null=False))
         ))
-        db.create_unique('ob_user_groups', ['obuser_id', 'group_id'])
+        db.create_unique('table_user_groups', ['obuser_id', 'group_id'])
 
         # Adding M2M table for field user_permissions on 'OBUser'
-        db.create_table('ob_user_user_permissions', (
+        db.create_table('table_user_user_permissions', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('obuser', models.ForeignKey(orm[u'core.obuser'], null=False)),
             ('permission', models.ForeignKey(orm[u'auth.permission'], null=False))
         ))
-        db.create_unique('ob_user_user_permissions', ['obuser_id', 'permission_id'])
+        db.create_unique('table_user_user_permissions', ['obuser_id', 'permission_id'])
 
 
     def backwards(self, orm):
+        # Deleting model 'Present'
+        db.delete_table('table_present')
+
         # Deleting model 'OBUser'
-        db.delete_table('ob_user')
+        db.delete_table('table_user')
 
         # Removing M2M table for field groups on 'OBUser'
-        db.delete_table('ob_user_groups')
+        db.delete_table('table_user_groups')
 
         # Removing M2M table for field user_permissions on 'OBUser'
-        db.delete_table('ob_user_user_permissions')
+        db.delete_table('table_user_user_permissions')
 
 
     models = {
@@ -73,7 +86,7 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         u'core.obuser': {
-            'Meta': {'object_name': 'OBUser', 'db_table': "'ob_user'"},
+            'Meta': {'object_name': 'OBUser', 'db_table': "'table_user'"},
             'display_name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '200', 'db_index': 'True'}),
             'facebook_id': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
@@ -86,6 +99,14 @@ class Migration(SchemaMigration):
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'tz_offset': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
+        },
+        u'core.present': {
+            'Meta': {'object_name': 'Present', 'db_table': "'table_present'"},
+            'cost': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'image_link': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'item_link': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '500'})
         }
     }
 
