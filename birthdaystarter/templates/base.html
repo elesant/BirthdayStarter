@@ -1,0 +1,44 @@
+{% load compress %}
+
+<!DOCTYPE html>
+<html lang="en" ng-app>
+<head>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>{% block title %}{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="author" content="">
+
+  {% compress css %}
+  <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}css/glyphicons.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}css/birthdaystarter.css" rel="stylesheet">
+  {% endcompress %}
+
+  {% compress js %}
+  <script src="{{ STATIC_URL }}js/jquery.js"></script>
+  <script src="{{ STATIC_URL }}js/angular.js"></script>
+  {% endcompress %}
+  {% compress js %}
+  <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
+  <script src="{{ STATIC_URL }}js/birthdaystarter.js"></script>
+  {% endcompress %}
+
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css'>
+  <link href="http://font-service.herokuapp.com/glyphicons-regular.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+  {% block content %}{% endblock %}
+
+  <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+  <script src="{{ STATIC_URL }}js/angularFire.js"></script>
+
+</body>
+</html>

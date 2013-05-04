@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Birthday Starter{% endblock %}
+
+{% block content %}
+
+<div class="container" ng-controller="IndexCtrl">
+  <h1>Birthday Starter</h1>
+  Email: {{ user.email }}<br />
+  Name: {{ user.display_name }}<br />
+  Price: ${{ user.price }}<br />
+  Cash: ${{ user.cash }}<br /><br />
+  <a href="/facebook-login/" class="btn btn-large btn-primary">Facebook Connect</a>
+  <a href="/signout/" class="btn btn-large">Sign Out</a>
+  <form id="form-signup">
+    
+  </form>
+</div>
+
+{% verbatim %}
+{% endverbatim %}
+
+{% endblock %}
