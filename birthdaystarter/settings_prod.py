@@ -25,6 +25,9 @@ COMPRESS_STORAGE = STATICFILES_STORAGE
 STATIC_URL = 'https://s3.amazonaws.com/birthdaystarter/'
 MEDIA_URL = 'https://s3.amazonaws.com/birthdaystarter/'
 
+FACEBOOK_APP_ID = '363980993712828'
+FACEBOOK_APP_SECRET = 'a93c979b7d23272a7bcc793bf9daec02'
+
 # Set your DSN value
 RAVEN_CONFIG = {
     'dsn': 'https://72751d7b7a174ea8932d0e6fb8f1e192:e17a9554929d4f92b966bbb4c0023e3c@app.getsentry.com/6931',
