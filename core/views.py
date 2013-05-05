@@ -68,6 +68,13 @@ def birthday_detail(request, birthday_id=None):
         context['amount_target'] = birthday.amount_target
         presents = Present.objects.filter(birthday=birthday)
         context['presents'] = presents
+        try:
+            _ = BirthdayContribution.objects.get(birthday=birthday, contributor=request.user)
+            in_discussion = True
+        except BirthdayContribution.DoesNotExist:
+            in_discussion = False
+        context['in_discussion'] = in_discussion
+        print in_discussion
         return HttpResponse(tpl.render(context))
 
 @csrf_exempt
@@ -138,7 +145,8 @@ def api_present_parse(request):
                 new_present.asn = asn
                 new_present.birthday = birthday
                 new_present.save()
-                birthday.amount_target += cost
+                if cost > birthday.amount_target:
+                    birthday.amount_target = cost
                 birthday.save()
                 status = 201
         else:
