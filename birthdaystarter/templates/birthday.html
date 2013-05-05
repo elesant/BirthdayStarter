@@ -75,7 +75,7 @@
               </a>
             </div>
             <div class="birthday-desc">
-              <strong>${{ present }}</strong><br>
+              <strong>${{ present.cost }}</strong><br>
               <a href="{{ present.item_link}}">{{ present.name }}</a>
             </div>
           </div>
@@ -88,7 +88,7 @@
       {% if in_discussion %}
       <div class="birthday-price-well well">
           <label><strong>Recommended Amount: $20</strong></label>
-          <input type="text" placeholder="Amount to Contribute">
+          <input type="text" id="amountbox" placeholder="Amount to Contribute">
           <script src="https://checkout.stripe.com/v2/checkout.js"></script>
           <button id="customButton" class="btn btn-primary">Contribute</button>
 
@@ -99,12 +99,17 @@
                 $('form').append($input).submit();
               };
 
+              var requestedAmount = $('#amountbox').val() * 100;
+              if (!requestedAmount) {
+                requestedAmount = 2000.0;
+              }
+
               StripeCheckout.open({
                 key:         'pk_test_g1Opam2bETupIcPk8dWqQREi',
-                address:     true,
-                amount:      5000,
-                name:        'Joes Pistachios',
-                description: 'A bag of Pistachios',
+                address:     false,
+                amount:      requestedAmount,
+                name:        'Giftly',
+                description: 'Present for ' + '{{ facebook_user.name }}',
                 panelLabel:  'Checkout',
                 token:       token
               });
