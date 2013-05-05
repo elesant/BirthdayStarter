@@ -4,47 +4,11 @@
 
 {% block content %}
 
-<div class="container" ng-controller="IndexCtrl">
-  <h1>Birthday Starter</h1>
-  <h3>Please Signin</h3>
-  <a href="/facebook-login/" class="btn btn-large btn-primary">Facebook Connect</a>
-  <form id="form-signup">
-
-  </form>
-  {% if user.is_authenticated %}
-  <img src="https://graph.facebook.com/{{ user.facebook_id }}/picture?type=square">
-  <img src="https://graph.facebook.com/{{ user.facebook_id }}/picture?type=large">
-  Email: {{ user.email }}<br />
-  Name: {{ user.display_name }}<br /><br />
-  <a id="btn-get-friend-list" href="#" class="btn btn-large btn-info">Get Friend List</a>
-  <input id="input-parse-link" type="text" placeholder="Paste Item URL Here...">
-  <div id="item-panel">
-  </div>
-  <div id="friend-list">
-  </div>
-  <a href="/signout/" class="btn btn-large">Sign Out</a>
-  {% else %}
-  <h3>Please Signin</h3>
-  <a href="/facebook-login/" class="btn btn-large btn-primary">Facebook Connect</a>
-  {% endif %}
+<div class="birthday-splash container">
+<img width="550" height="260" src="{{ STATIC_URL }}img/splash.png">
+<h1>Birthday gifting made easier with friends.</h1>
+<a class="btn btn-large" href="/facebook-login/"><strong>Get Started</strong></a>
 </div>
-
-<script>
-
-$('#btn-get-friend-list').click(function() {
-  $.ajax({
-    type: 'POST',
-    url: '/api/friend/list/',
-    success: function(data){
-    	for (var i=0; i < data['friend_list'].length; i++)
-		{
-			$('#friend-list').append(data['friend_list'][i]['name'] + '<br />');
-		}
-    }
-  });
-});
-
-</script>
 
 {% verbatim %}
 {% endverbatim %}

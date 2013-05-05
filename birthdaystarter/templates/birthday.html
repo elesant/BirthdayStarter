@@ -24,7 +24,7 @@
             </div>
             <br>
             <div class="birthday-completion-data">
-              {{ days_left }} days until Michael's birthday
+              {{ days_left }} days until {{ facebook_user.first_name }}'s birthday
               <div class="birthday-progress progress progress-danger">
                 <div class="bar" style="width: {{ percentage }}%"></div>
                 <div class="birthday-contributions-info">
@@ -52,18 +52,36 @@
     <div class="span4">
       <ul class="nav nav-list">
         <li class="nav-header">Contributors</li>
-        <li class=""><a href="https://facebook.com/jeff">Jeff Morgan</a></li>
-        <li class=""><a href="https://facebook.com/jeff">Jeff Morgan</a></li>
-        <li class=""><a href="https://facebook.com/jeff">Jeff Morgan</a></li>
-        <li class=""><a href="https://facebook.com/jeff">Jeff Morgan</a></li>
+        {% for contribution in contributions %}
+        <li class=""><a href="https://wwww.facebook.com/{{ contribution.contributor.facebook_id }}">{{ contribution.contributor.display_name }}</a> ${{ contribution.amount }}</li>
+        {% endfor %}
+        {% if num_contributions == 0 %}
+        <li class="">No contributors</li>
+        {% endif %}
       </ul>
     </div>
   </div>
-  <div id="birthday-gift-ideas">
-
-  </div>
   <div class="birthday-mid-row row">
     <div class="span8">
+      <div id="birthday-gift-ideas">
+          {% for present in presents %}
+          <div class="birthday-box">
+            <div class="birthday-portrait">
+              <a href="{{ birthday_url }}">
+                <div class="birthday-portrait-overlay">
+                Gift
+                </div>
+                <img class="birthday-product-picture" src="{{ present.image_link}}">
+              </a>
+            </div>
+            <div class="birthday-desc">
+              <a href="{{ present.item_link}}">{{ present.name }}</a>
+            </div>
+          </div>
+          {% endfor %}
+        <div class="span8">
+        </div>
+      </div>
     </div>
     <div class="span4">
       <div class="birthday-price-well well">
@@ -95,8 +113,8 @@
         </div>
         <div class="birthday-price-well well">
           <label><strong>Suggest a Product:</strong></label>
-          <input type="text" placeholder="http://amazon.com/...">
-          <button id="button" class="btn btn-success">Suggest</button>
+          <input id="input-parse-link" type="text" placeholder="http://amazon.com/...">
+          <button id="btn-suggest-gift" class="btn btn-success">Suggest</button>
         </div>
       </div>
     </div>
@@ -111,19 +129,41 @@
 {% compress js %}
 <script src="{{ STATIC_URL }}js/birthday.js"></script>
 <script>
-$('#input-parse-link').change(function() {
+$('#btn-suggest-gift').click(function() {
   $.ajax({
     type: 'POST',
     url: '/api/present/parse/',
     data: {
       'birthday_id': {{ birthday.id }},
-      'item_link': $(this).val(),
+      'item_link': $('#input-parse-link').val(),
     },
     success: function(data){
-      $('#item-panel').html('');
-      $('#item-panel').append(data['name'] + '<br />');
-      $('#item-panel').append('$' + data['cost'] + '<br />');
-      $('#item-panel').append('<img src="' + data['image_link'] + '"><br />');
+      window.location.reload();
+    }
+  });
+});
+$('#btn-join').click(function() {
+  $.ajax({
+    type: 'POST',
+    url: '/api/birthday/join/',
+    data: {
+      'birthday_id': {{ birthday.id }},
+    },
+    success: function(data){
+      window.location.reload();
+    }
+  });
+});
+$('#btn-contribute').click(function() {
+  $.ajax({
+    type: 'POST',
+    url: '/api/birthday/pay/',
+    data: {
+      'birthday_id': {{ birthday.id }},
+      'amount': 20,
+    },
+    success: function(data){
+      window.location.reload();
     }
   });
 });

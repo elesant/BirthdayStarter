@@ -2,6 +2,19 @@
   padding-top: 10px;
 }
 
+body {
+  background: url('../img/background.png');
+  font-weight: 300;
+}
+
+h1 {
+  color: #89152e;
+}
+
+.birthday-splash {
+  text-align: center;
+}
+
 .navbar {
   margin-bottom: 0;
 }
@@ -32,6 +45,10 @@
   position: absolute;
 }
 
+.navbar-inner {
+  color: #89152e;
+}
+
 .birthday-box {
   border-radius: 5px;
   overflow: hidden;
@@ -45,6 +62,7 @@
 }
 
 .birthday-desc {
+  background: white;
   padding: 5px 5px 0 5px;
   border: 1px solid #ddd;
 }
@@ -174,4 +192,9 @@
 
 .birthday-price-well {
   text-align: center;
+}
+
+.birthday-product-picture {
+  width: auto;
+  height: 180px;
 }
