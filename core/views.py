@@ -3,9 +3,7 @@ import urllib
 import time
 
 from core.models import OBUser, Present
-=======
 from core.models import User, Present, Birthday, BirthdayContribution
->>>>>>> a71baa9a19baa034af7fd899e25cb46965500971
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from core.forms import get_validation_errors, UserRegisterForm
