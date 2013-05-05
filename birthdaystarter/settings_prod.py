@@ -5,7 +5,7 @@ ENVIRONMENT = 'PROD'
 ALLOWED_HOSTS = [
     'birthdaystarter.herokuapp.com',
     'giftly.ca',
-    'www.giftly.com',
+    'www.giftly.ca',
 ]
 
 DEBUG = False
