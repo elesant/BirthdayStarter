@@ -195,6 +195,10 @@ h1 {
 }
 
 .birthday-product-picture {
-  width: auto;
-  height: 180px;
+  width: 220px;
+  height: auto;
+}
+
+#add_contributor_input {
+  margin-top: 5px;
 }

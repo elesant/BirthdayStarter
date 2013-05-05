@@ -53,10 +53,10 @@
       <ul class="nav nav-list">
         <li class="nav-header">Contributors</li>
         {% for contribution in contributions %}
-        <li class=""><a href="https://wwww.facebook.com/{{ contribution.contributor.facebook_id }}">{{ contribution.contributor.display_name }}</a> ${{ contribution.amount }}</li>
-        {% endfor %}
-        {% if num_contributions == 0 %}
-        <li class="">No contributors</li>
+          <li class=""><a href="https://wwww.facebook.com/{{ contribution.contributor.facebook_id }}">{{ contribution.contributor.display_name }}</a> ${{ contribution.amount }}</li>
+          {% endfor %}
+          {% if num_contributions == 0 %}
+          <li class="">No contributors</li>
         {% endif %}
       </ul>
     </div>
@@ -75,6 +75,7 @@
               </a>
             </div>
             <div class="birthday-desc">
+              <strong>${{ present }}</strong><br>
               <a href="{{ present.item_link}}">{{ present.name }}</a>
             </div>
           </div>
@@ -131,6 +132,7 @@
 
 {% compress js %}
 <script src="{{ STATIC_URL }}js/birthday.js"></script>
+<script src="{{ STATIC_URL }}js/jquery.tokeninput.js"></script>
 <script>
 $('#btn-suggest-gift').click(function() {
   $.ajax({
@@ -192,7 +194,6 @@ discussionRef.limit(10).on('child_added', function (snapshot) {
 });
 
 </script>
-
 {% endcompress %}
 
 {% endblock %}

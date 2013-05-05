@@ -1,6 +1,7 @@
 import urllib
 import time
 import datetime
+import json
 from core.models import User, Present, Birthday, BirthdayContribution
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -65,8 +66,11 @@ def birthday_detail(request, birthday_id=None):
         context['num_contributions'] = len(contributions)
         context['contributions'] = contributions
         context['amount_raised'] = birthday.amount_raised
-        context['amount_target'] = birthday.amount_target
-        presents = Present.objects.filter(birthday=birthday)
+        presents = Present.objects.filter(birthday=birthday).order_by('-cost')
+        if presents:
+            context['amount_target'] = presents[0].cost
+        else:
+            context['amount_target'] = 0
         context['presents'] = presents
         return HttpResponse(tpl.render(context))
 
@@ -258,4 +262,3 @@ def index(request):
 def home(request):
     tpl = loader.get_template('home.html')
     return HttpResponse(tpl.render(RequestContext(request, {})))
-
