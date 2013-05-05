@@ -68,25 +68,42 @@ def api_present_parse(request):
         page_response = conn.read()
         conn.close()
         soup = BeautifulSoup(page_response)
-        name = soup.find('span', {'id': 'btAsinTitle'}).find(text=True)
-        response['name'] = name
+        asn = soup.find('input', {'id': 'ASIN'})['value']
+        response['asn'] = asn
         try:
-            image_link = soup.find('img', {'id': 'original-main-image'})['src']
-        except:
+            birthday_id = request.POST['birthday_id']
+            birthday = Birthday.objects.get(id=birthday_id)
+            response['birthday_id'] = birthday_id
+        except Birthday.DoesNotExist:
+            birthday = None
+        if birthday:
             try:
-                image_link = soup.find('img', {'id': 'main-image'})['src']
-            except:
-                image_link = None
-        response['image_link'] = image_link
-        cost = float(soup.find('span', {'id': 'actualPriceValue'}).find(class_='priceLarge').find(text=True).split('$')[1])
-        response['cost'] = cost
-        new_present = Present()
-        new_present.item_link = item_link
-        new_present.image_link = image_link
-        new_present.name = name
-        new_present.cost = cost
-        new_present.save()
-        status = 201
+                present = Present.objects.get(asn=asn, birthday=birthday)
+                status = 204
+            except Present.DoesNotExist:
+                name = soup.find('span', {'id': 'btAsinTitle'}).find(text=True)
+                response['name'] = name
+                try:
+                    image_link = soup.find('img', {'id': 'original-main-image'})['src']
+                except:
+                    try:
+                        image_link = soup.find('img', {'id': 'main-image'})['src']
+                    except:
+                        image_link = None
+                response['image_link'] = image_link
+                cost = float(soup.find('span', {'id': 'actualPriceValue'}).find(class_='priceLarge').find(text=True).split('$')[1])
+                response['cost'] = cost
+                new_present = Present()
+                new_present.item_link = item_link
+                new_present.image_link = image_link
+                new_present.name = name
+                new_present.cost = cost
+                new_present.asn = asn
+                new_present.birthday = birthday
+                new_present.save()
+                status = 201
+        else:
+            status = 404
     except KeyError:
         status = 400
     response['meta']['status'] = status

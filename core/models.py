@@ -3,20 +3,6 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django.utils import timezone
 
 
-class Present(models.Model):
-
-    item_link = models.TextField(blank=True, null=True)
-    name = models.CharField(max_length=500)
-    cost = models.FloatField(default=0.0)
-    image_link = models.TextField(blank=True, null=True)
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        db_table = 'table_present'
-
-
 class CustomUserManager(BaseUserManager):
 
     def create_user(self, email=None, password=None, **extra_fields):
@@ -86,6 +72,22 @@ class Birthday(models.Model):
 
     class Meta:
         db_table = 'table_birthday'
+
+
+class Present(models.Model):
+
+    item_link = models.TextField(blank=True, null=True)
+    asn = models.CharField(max_length=200, blank=True, null=True)
+    name = models.CharField(max_length=500)
+    cost = models.FloatField(default=0.0)
+    image_link = models.TextField(blank=True, null=True)
+    birthday = models.ForeignKey(Birthday, blank=True, null=True)
+
+    def __unicode__(self):
+        return '%s -> %s' % (self.name, self.birthday)
+
+    class Meta:
+        db_table = 'table_present'
 
 
 class BirthdayContribution(models.Model):
