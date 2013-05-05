@@ -1,4 +1,4 @@
-from core.models import OBUser, Present
+from core.models import User, Present
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from core.forms import get_validation_errors, UserRegisterForm
@@ -41,7 +41,7 @@ def api_user_register(request):
     errors = get_validation_errors(form)
     if form.is_valid():
         data = form.cleaned_data
-        new_user = OBUser(email=data['email'])
+        new_user = User(email=data['email'])
         new_user.set_password(data['password'])
         new_user.save()
         response['new_user_id'] = new_user.id

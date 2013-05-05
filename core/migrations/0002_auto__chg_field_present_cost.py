@@ -38,8 +38,8 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        u'core.obuser': {
-            'Meta': {'object_name': 'OBUser', 'db_table': "'table_user'"},
+        u'core.user': {
+            'Meta': {'object_name': 'User', 'db_table': "'table_user'"},
             'display_name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '200', 'db_index': 'True'}),
             'facebook_id': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),

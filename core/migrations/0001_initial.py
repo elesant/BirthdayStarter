@@ -18,7 +18,7 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'core', ['Present'])
 
-        # Adding model 'OBUser'
+        # Adding model 'User'
         db.create_table('table_user', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('password', self.gf('django.db.models.fields.CharField')(max_length=128)),
@@ -31,36 +31,36 @@ class Migration(SchemaMigration):
             ('facebook_id', self.gf('django.db.models.fields.CharField')(max_length=200, null=True, blank=True)),
             ('display_name', self.gf('django.db.models.fields.CharField')(max_length=200)),
         ))
-        db.send_create_signal(u'core', ['OBUser'])
+        db.send_create_signal(u'core', ['User'])
 
-        # Adding M2M table for field groups on 'OBUser'
+        # Adding M2M table for field groups on 'User'
         db.create_table('table_user_groups', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('obuser', models.ForeignKey(orm[u'core.obuser'], null=False)),
+            ('user', models.ForeignKey(orm[u'core.user'], null=False)),
             ('group', models.ForeignKey(orm[u'auth.group'], null=False))
         ))
-        db.create_unique('table_user_groups', ['obuser_id', 'group_id'])
+        db.create_unique('table_user_groups', ['user_id', 'group_id'])
 
-        # Adding M2M table for field user_permissions on 'OBUser'
+        # Adding M2M table for field user_permissions on 'User'
         db.create_table('table_user_user_permissions', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('obuser', models.ForeignKey(orm[u'core.obuser'], null=False)),
+            ('user', models.ForeignKey(orm[u'core.user'], null=False)),
             ('permission', models.ForeignKey(orm[u'auth.permission'], null=False))
         ))
-        db.create_unique('table_user_user_permissions', ['obuser_id', 'permission_id'])
+        db.create_unique('table_user_user_permissions', ['user_id', 'permission_id'])
 
 
     def backwards(self, orm):
         # Deleting model 'Present'
         db.delete_table('table_present')
 
-        # Deleting model 'OBUser'
+        # Deleting model 'User'
         db.delete_table('table_user')
 
-        # Removing M2M table for field groups on 'OBUser'
+        # Removing M2M table for field groups on 'User'
         db.delete_table('table_user_groups')
 
-        # Removing M2M table for field user_permissions on 'OBUser'
+        # Removing M2M table for field user_permissions on 'User'
         db.delete_table('table_user_user_permissions')
 
 
@@ -85,8 +85,8 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        u'core.obuser': {
-            'Meta': {'object_name': 'OBUser', 'db_table': "'table_user'"},
+        u'core.user': {
+            'Meta': {'object_name': 'User', 'db_table': "'table_user'"},
             'display_name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '200', 'db_index': 'True'}),
             'facebook_id': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),

@@ -1,7 +1,7 @@
 import urllib
 from django.conf import settings
 from core.utilities import get_domain, random_string, instant_login
-from core.models import OBUser
+from core.models import User
 from django.utils import simplejson
 from django.http import HttpResponsePermanentRedirect
 
@@ -47,10 +47,10 @@ class FacebookMiddleware(object):
 
     def unbind_facebook_account(self, user_data):
         try:
-            user = OBUser.objects.get(facebook_id=user_data['id'])
+            user = User.objects.get(facebook_id=user_data['id'])
             user.facebook_id = None
             user.save()
-        except OBUser.DoesNotExist:
+        except User.DoesNotExist:
             pass
 
     def bind_facebook_account(self, user, user_data):
@@ -61,12 +61,12 @@ class FacebookMiddleware(object):
     def facebook_connect(self, user_data):
         try:
             # Logging in with Facebook
-            user = OBUser.objects.get(facebook_id=user_data['id'])
+            user = User.objects.get(facebook_id=user_data['id'])
             user.tz_offset = user_data['timezone']
             user.save()
-        except OBUser.DoesNotExist:
+        except User.DoesNotExist:
             # Creating new account with Facebook
-            user = OBUser()
+            user = User()
             user.email = user_data['email']
             user.facebook_id = user_data['id']
             user.tz_offset = user_data['timezone']

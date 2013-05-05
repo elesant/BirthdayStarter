@@ -1,5 +1,5 @@
 from django import forms
-from core.models import OBUser
+from core.models import User
 
 
 def get_validation_errors(form):
@@ -34,9 +34,9 @@ class UserRegisterForm(StandardForm):
     def clean_email(self):
         email = self.cleaned_data['email'].strip().lower()
         try:
-            _ = OBUser.objects.get(email=email)
+            _ = User.objects.get(email=email)
             raise forms.ValidationError('Email is already in use.')
-        except OBUser.DoesNotExist:
+        except User.DoesNotExist:
             return email
 
     def clean_password_conf(self):
