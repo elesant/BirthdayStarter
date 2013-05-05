@@ -82,7 +82,7 @@ class Birthday(models.Model):
     time_modified = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return '%s - %s' % (facebook_id, birthday)
+        return '%s - %s' % (self.facebook_id, self.birthday)
 
     class Meta:
         db_table = 'table_birthday'
