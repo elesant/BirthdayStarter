@@ -1,7 +1,6 @@
 import urllib
 import time
 
-from core.models import OBUser, Present
 from core.models import User, Present, Birthday, BirthdayContribution
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
