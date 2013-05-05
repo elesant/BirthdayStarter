@@ -59,13 +59,15 @@ def birthday_detail(request, birthday_id=None):
         context['facebook_user'] = get_facebook_user_data(request, birthday.facebook_id)
         delta = birthday.birthday - datetime.date.today()
         context['days_left'] = delta.days
-
-        contributions = BirthdayContribution.objects.filter(birthday=birthday).count()
+        contributions = BirthdayContribution.objects.filter(birthday=birthday)
         pleged_percentage = int(birthday.amount_raised / (birthday.amount_target or 1) * 100)
         context['percentage'] = pleged_percentage
-        context['num_contributions'] = contributions
+        context['num_contributions'] = len(contributions)
+        context['contributions'] = contributions
         context['amount_raised'] = birthday.amount_raised
         context['amount_target'] = birthday.amount_target
+        presents = Present.objects.filter(birthday=birthday)
+        context['presents'] = presents
         return HttpResponse(tpl.render(context))
 
 @csrf_exempt
@@ -195,21 +197,20 @@ def api_birthday_join(request):
         try:
             birthday = Birthday.objects.get(id=birthday_id)
             response['birthday_id'] = birthday_id
-            contribution = BirthdayContribution()
-            contribution.birthday = birthday
-            contribution.contributor = request.user
-            contribution.save()
+            try:
+                contribution = BirthdayContribution.objects.get(birthday=birthday, contributor=request.user)
+                status = 204
+            except BirthdayContribution.DoesNotExist:
+                contribution = BirthdayContribution()
+                contribution.birthday = birthday
+                contribution.contributor = request.user
+                contribution.save()
+                status = 201
             response['birthday_contribution_id'] = contribution.id
-            status = 201
         except Birthday.DoesNotExist:
             status = 404
     else:
-        facebook_id = request.POST['facebook_id']
-        birthday_date = request.POST['birthday']
-        birthday = Birthday(facebook_id=facebook_id, birthday=birthday_date)
-        birthday.save()
-        response['birthday_id'] = birthday.id
-        status = 201
+        status = 400
     response['meta']['status'] = status
     benchmark_end = time.time()
     response['meta']['execution_time'] = benchmark_end - benchmark_start

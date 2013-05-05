@@ -48,15 +48,36 @@
           </div>
         </div>
       </div>
+      
     </div>
     <div class="span4">
       Contributors
+      <a id="btn-join" href="#" class="btn btn-info">Join Discussion</a>
+      <a id="btn-contribute" href="#" class="btn btn-info">Contribute</a>
+      {% for contribution in contributions %}
+      <div class="well">
+        <a href="https://wwww.facebook.com/{{ contribution.contributor.facebook_id }}">{{ contribution.contributor.display_name }}</a><br />
+        ${{ contribution.amount }}
+      </div>
+      {% endfor %}
     </div>
   </div>
-  <div id="birthday-gift-ideas">
-
+  <div id="birthday-gift-ideas" class="row">
+    <div class="span8">
+      <br />
+      <input id="input-parse-link" type="text" placeholder="Paste Gift URL Here...">
+      <a id="btn-suggest-gift" href="#" class="btn btn-info">Suggest Gift</a>
+      {% for present in presents %}
+      <div class="well">
+        <a href="{{ present.item_link}}">{{ present.name }}</a><br />
+        ${{ present.cost }}
+        <img src="{{ present.image_link}}" />
+      </div>
+      {% endfor %}
+    </div>
+    <div class="span8">
+    </div>
   </div>
-  <input id="input-parse-link" type="text" placeholder="Paste Item URL Here...">
 </div>
 
 {% verbatim %}
@@ -67,19 +88,41 @@
 {% compress js %}
 <script src="{{ STATIC_URL }}js/birthday.js"></script>
 <script>
-$('#input-parse-link').change(function() {
+$('#btn-suggest-gift').click(function() {
   $.ajax({
     type: 'POST',
     url: '/api/present/parse/',
     data: {
       'birthday_id': {{ birthday.id }},
-      'item_link': $(this).val(),
+      'item_link': $('#input-parse-link').val(),
     },
     success: function(data){
-      $('#item-panel').html('');
-      $('#item-panel').append(data['name'] + '<br />');
-      $('#item-panel').append('$' + data['cost'] + '<br />');
-      $('#item-panel').append('<img src="' + data['image_link'] + '"><br />');
+      window.location.reload();
+    }
+  });
+});
+$('#btn-join').click(function() {
+  $.ajax({
+    type: 'POST',
+    url: '/api/birthday/join/',
+    data: {
+      'birthday_id': {{ birthday.id }},
+    },
+    success: function(data){
+      window.location.reload();
+    }
+  });
+});
+$('#btn-contribute').click(function() {
+  $.ajax({
+    type: 'POST',
+    url: '/api/birthday/pay/',
+    data: {
+      'birthday_id': {{ birthday.id }},
+      'amount': 20,
+    },
+    success: function(data){
+      window.location.reload();
     }
   });
 });
