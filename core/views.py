@@ -174,13 +174,13 @@ def api_birthday_pay(request):
             response['birthday_id'] = birthday_id
             contribution = BirthdayContribution.objects.get(birthday=birthday, contributor=request.user)
             amount = float(request.POST['amount'])
-            if contribution.amount > 0.0:
+            if amount > 0.0:
                 contribution.amount += amount
             contribution.save()
             response['amount'] = amount
             response['total_amount'] = contribution.amount
             response['birthday_contribution_id'] = contribution.id
-            birthday.amount_raised += contribution.amount
+            birthday.amount_raised += amount
             birthday.save()
         except Birthday.DoesNotExist:
             status = 404
