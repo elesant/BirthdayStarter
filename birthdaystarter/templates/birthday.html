@@ -24,8 +24,8 @@
             </div>
             <br>
             <div class="birthday-completion-data">
-              {{ days_left }} days until {{ facebook_user.first_name }}'s birthday
-              <div class="birthday-progress progress progress-danger">
+              <h6 style="color: #888;">{{ days_left }} days until {{ facebook_user.first_name }}'s birthday</h6>
+              <div class="birthday-progress progress {{ progress_bar_class }}">
                 <div class="bar" style="width: {{ percentage }}%"></div>
                 <div class="birthday-contributions-info">
                   {{ num_contributions }} Contributions
@@ -35,13 +35,13 @@
             <div class="birthday-completion-stats">
               <div class="row">
                 <div class="span2 birthday-funded-info">
-                  {{ percentage }}%<br>Funded
+                  <h3>{{ percentage }}%</h3><span style="position: relative; top: -10px;">Funded</span>
                 </div>
                 <div class="span2 birthday-contributed-info">
-                  ${{ amount_raised }}<br>Funded
+                  <h3>${{ amount_raised }}</h3><span style="position: relative; top: -10px;">Raised</span>
                 </div>
                 <div class="span2">
-                  ${{ amount_target }}<br>Required
+                  <h3>${{ amount_target }}</h3><span style="position: relative; top: -10px;">Required</span>
                 </div>
               </div>
             </div>
@@ -85,6 +85,7 @@
       </div>
     </div>
     <div class="span4">
+      {% if in_discussion %}
       <div class="birthday-price-well well">
           <label><strong>Recommended Amount: $20</strong></label>
           <input type="text" placeholder="Amount to Contribute">
@@ -112,18 +113,27 @@
             });
           </script>
         </div>
+        {% endif %}
         <div class="birthday-price-well well">
-          <label><strong>Suggest a Product:</strong></label>
+          <label><strong>Suggest a Gift:</strong></label>
           <input id="input-parse-link" type="text" placeholder="http://amazon.com/...">
           <button id="btn-suggest-gift" class="btn btn-success">Suggest</button>
+        </div>
+        <div class="discussion-well well">
+          <label style="text-align: center;"><strong>Discussion:</strong></label>
+          {% if in_discussion %}
+          <div id='messagesDiv' style="background: white; padding: 5px; margin-bottom: 5px; border: 2px solid #DDD; overflow-y: scroll; height: 300px;"></div>
+          <input type='text' id='messageInput' class="input-block-level" placeholder='Message...'>
+          {% else %}
+          <div style="text-align: center;">
+            <button id="btn-join" class="btn btn-info" >Join Discussion</button>
+          </div>
+          {% endif %}
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<div id='messagesDiv'></div>
-<input type='text' id='messageInput' placeholder='Message...'>
 
 {% verbatim %}
 <script id="product-box-template" type="text/x-handlebars-template">
@@ -190,7 +200,8 @@ discussionRef.limit(10).on('child_added', function (snapshot) {
   var message = snapshot.val();
   var message_display = '<div><a href="https://www.facebook.com/' + message.facebook_id + '">' + message.name + '</a>: ' + message.text + '</div>';
   $('#messagesDiv').prepend(message_display);
-  $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
+  var messagesDiv = document.getElementById('messagesDiv');
+  messagesDiv.scrollTop = 0;
 });
 
 </script>
