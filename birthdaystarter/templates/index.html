@@ -11,6 +11,7 @@
   <img src="https://graph.facebook.com/{{ user.facebook_id }}/picture?type=large">
   Email: {{ user.email }}<br />
   Name: {{ user.display_name }}<br /><br />
+  <input id="input-parse-link" type="text" />
   <a href="/signout/" class="btn btn-large">Sign Out</a>
   {% else %}
   <h3>Please Signin</h3>
