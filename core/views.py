@@ -101,6 +101,8 @@ def api_present_parse(request):
                 new_present.asn = asn
                 new_present.birthday = birthday
                 new_present.save()
+                birthday.amount_target += cost
+                birthday.save()
                 status = 201
         else:
             status = 404
@@ -178,6 +180,8 @@ def api_birthday_pay(request):
             response['amount'] = amount
             response['total_amount'] = contribution.amount
             response['birthday_contribution_id'] = contribution.id
+            birthday.amount_raised += contribution.amount
+            birthday.save()
         except Birthday.DoesNotExist:
             status = 404
     else:
