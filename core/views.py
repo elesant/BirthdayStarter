@@ -144,6 +144,35 @@ def api_birthday_join(request):
     return build_response(response, status=status)
 
 
+@csrf_exempt
+@login_required
+def api_birthday_pay(request):
+    benchmark_start = time.time()
+    response = prepare_response(request)
+    status = 200
+    birthday_id = request.POST['birthday_id']
+    if birthday_id:
+        try:
+            birthday = Birthday.objects.get(id=birthday_id)
+            response['birthday_id'] = birthday_id
+            contribution = BirthdayContribution.objects.get(birthday=birthday, contributor=request.user)
+            amount = float(request.POST['amount'])
+            if contribution.amount > 0.0:
+                contribution.amount += amount
+            contribution.save()
+            response['amount'] = amount
+            response['total_amount'] = contribution.amount
+            response['birthday_contribution_id'] = contribution.id
+        except Birthday.DoesNotExist:
+            status = 404
+    else:
+        status = 400
+    response['meta']['status'] = status
+    benchmark_end = time.time()
+    response['meta']['execution_time'] = benchmark_end - benchmark_start
+    return build_response(response, status=status)
+
+
 def index(request):
     context = RequestContext(request)
     return render_to_response('index.html', context)
