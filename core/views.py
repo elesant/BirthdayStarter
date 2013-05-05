@@ -1,11 +1,11 @@
 import urllib
-import urllib2
 import time
 
 from core.models import OBUser, Present
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from core.forms import get_validation_errors, UserRegisterForm
-from core.utilities import build_response, prepare_response, get_domain
+from core.utilities import build_response, prepare_response, get_domain, get_facebook_friends
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.conf import settings
@@ -16,7 +16,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect
 from django.template import RequestContext, loader
 from bs4 import BeautifulSoup
-import urllib
 
 def facebook_login(request):
     # TODO: Add CSRF prevention
@@ -25,7 +24,7 @@ def facebook_login(request):
             'client_id': settings.FACEBOOK_APP_ID,
             'redirect_uri': get_domain(request) + '/',
             'response_type': 'code',
-            'scope': 'email',
+            'scope': 'email,user_birthday,friends_birthday',
         }
     )
     return HttpResponseRedirect(login_link)
@@ -57,6 +56,7 @@ def api_user_register(request):
     return build_response(response, status=status)
 
 @csrf_exempt
+@login_required
 def api_present_parse(request):
     benchmark_start = time.time()
     response = prepare_response(request)
@@ -94,6 +94,22 @@ def api_present_parse(request):
     response['meta']['execution_time'] = benchmark_end - benchmark_start
     return build_response(response, status=status)
 
+@csrf_exempt
+@login_required
+def api_friend_list(request):
+    benchmark_start = time.time()
+    response = prepare_response(request)
+    status = 200
+    try:
+        friend_list =  get_facebook_friends(request)['data']
+        response['friend_list'] = friend_list
+    except:
+        status = 400
+    response['meta']['status'] = status
+    benchmark_end = time.time()
+    response['meta']['execution_time'] = benchmark_end - benchmark_start
+    return build_response(response, status=status)
+
 def index(request):
     if not request.user.is_authenticated():
         context = RequestContext(request)
@@ -103,13 +119,6 @@ def index(request):
 
 @login_required
 def home(request):
-
-    # get friends list
-    friends_birthday_api = 'https://graph.facebook.com/{0}/friends?fields=id,name,birthday'
-
-    # print friends_birthday_api.format(request.user.facebook_id)
-    # contents = urllib2.urlopen(friends_birthday_api.format(request.user.facebook_id)).read()
-    # results = json.loads(contents)
 
     tpl = loader.get_template('home.html')
     return HttpResponse(tpl.render(RequestContext(request, {})))

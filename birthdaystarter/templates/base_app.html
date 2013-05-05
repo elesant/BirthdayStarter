@@ -4,9 +4,17 @@
 
 {% block navbar %}
 <div class="container">
-  <div class="navbar">
+  <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <a class="brand" href="#">Birthday Starter</a>
+      <ul class="nav">
+        <li class="divider-vertical"></li>
+        <li>
+          <form class="navbar-search pull-left">
+            <input type="text" class="search-query" placeholder="Search">
+          </form>
+        </li>
+      </ul>
       <ul class="nav pull-right">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">

@@ -11,7 +11,56 @@
   <form id="form-signup">
 
   </form>
+  {% if user.is_authenticated %}
+  <img src="https://graph.facebook.com/{{ user.facebook_id }}/picture?type=square">
+  <img src="https://graph.facebook.com/{{ user.facebook_id }}/picture?type=large">
+  Email: {{ user.email }}<br />
+  Name: {{ user.display_name }}<br /><br />
+  <a id="btn-get-friend-list" href="#" class="btn btn-large btn-info">Get Friend List</a>
+  <input id="input-parse-link" type="text" placeholder="Paste Item URL Here...">
+  <div id="item-panel">
+  </div>
+  <div id="friend-list">
+  </div>
+  <a href="/signout/" class="btn btn-large">Sign Out</a>
+  {% else %}
+  <h3>Please Signin</h3>
+  <a href="/facebook-login/" class="btn btn-large btn-primary">Facebook Connect</a>
+  {% endif %}
 </div>
+
+<script>
+
+$('#input-parse-link').change(function() {
+  $.ajax({
+    type: 'POST',
+    url: '/api/present/parse/',
+    data: {
+      'item_link': $(this).val(),
+    },
+    success: function(data){
+      $('#item-panel').html('');
+      $('#item-panel').append(data['name'] + '<br />');
+      $('#item-panel').append('$' + data['cost'] + '<br />');
+      $('#item-panel').append('<img src="' + data['image_link'] + '"><br />');
+    }
+  });
+});
+
+$('#btn-get-friend-list').click(function() {
+  $.ajax({
+    type: 'POST',
+    url: '/api/friend/list/',
+    success: function(data){
+    	for (var i=0; i < data['friend_list'].length; i++)
+		{ 
+			$('#friend-list').append(data['friend_list'][i]['name'] + '<br />');
+		}
+    }
+  });
+});
+
+</script>
 
 {% verbatim %}
 {% endverbatim %}
