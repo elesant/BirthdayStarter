@@ -6,18 +6,10 @@
 
 <div class="container" ng-controller="IndexCtrl">
   <h1>Birthday Starter</h1>
-  {% if user.is_authenticated %}
-  <img src="https://graph.facebook.com/{{ user.facebook_id }}/picture?type=square">
-  <img src="https://graph.facebook.com/{{ user.facebook_id }}/picture?type=large">
-  Email: {{ user.email }}<br />
-  Name: {{ user.display_name }}<br /><br />
-  <a href="/signout/" class="btn btn-large">Sign Out</a>
-  {% else %}
   <h3>Please Signin</h3>
   <a href="/facebook-login/" class="btn btn-large btn-primary">Facebook Connect</a>
-  {% endif %}
   <form id="form-signup">
-    
+
   </form>
 </div>
 

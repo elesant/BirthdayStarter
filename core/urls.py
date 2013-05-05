@@ -6,4 +6,7 @@ urlpatterns = patterns('core.views',
     url(r'^facebook-login/$', 'facebook_login'),
     url(r'^signout/$', 'signout'),
     url(r'^api/user/register/$', 'api_user_register'),
+
+    # requires login
+    url(r'^home/$', 'home'),
 )

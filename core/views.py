@@ -1,15 +1,20 @@
+import urllib
+import urllib2
+import time
+
 from core.models import OBUser
 from django.views.decorators.csrf import csrf_exempt
 from core.forms import get_validation_errors, UserRegisterForm
 from core.utilities import build_response, prepare_response, get_domain
-import time
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.conf import settings
-import urllib
 from django.http import HttpResponseRedirect
 from django.contrib import auth
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect
+from django.template import RequestContext, loader
 
 def facebook_login(request):
     # TODO: Add CSRF prevention
@@ -23,11 +28,9 @@ def facebook_login(request):
     )
     return HttpResponseRedirect(login_link)
 
-
 def signout(request):
     auth.logout(request)
     return HttpResponseRedirect('/')
-
 
 @csrf_exempt
 def api_user_register(request):
@@ -51,7 +54,22 @@ def api_user_register(request):
     response['meta']['execution_time'] = benchmark_end - benchmark_start
     return build_response(response, status=status)
 
-
 def index(request):
-    context = RequestContext(request)
-    return render_to_response('index.html', context)
+    if not request.user.is_authenticated():
+        context = RequestContext(request)
+        return render_to_response('index.html', context)
+
+    return HttpResponseRedirect('/home')
+
+@login_required
+def home(request):
+
+    # get friends list
+    friends_birthday_api = 'https://graph.facebook.com/{0}/friends?fields=id,name,birthday'
+
+    # print friends_birthday_api.format(request.user.facebook_id)
+    # contents = urllib2.urlopen(friends_birthday_api.format(request.user.facebook_id)).read()
+    # results = json.loads(contents)
+
+    tpl = loader.get_template('home.html')
+    return HttpResponse(tpl.render(RequestContext(request, {})))
