@@ -94,15 +94,21 @@
 
           <script>
             $('#customButton').click(function(){
-              var token = function(res){
-                var $input = $('<input type=hidden name=stripeToken />').val(res.id);
-                $('form').append($input).submit();
-              };
-
               var requestedAmount = $('#amountbox').val() * 100;
               if (!requestedAmount) {
                 requestedAmount = 2000.0;
               }
+
+              var token = function(res){
+                $.ajax({
+                  type: 'POST',
+                  url: '/api/birthday/pay',
+                  data: {
+                    'amount': requestedAmount,
+                    'birthday_id': {{ birthday.id }}
+                  }
+                });
+              };
 
               StripeCheckout.open({
                 key:         'pk_test_g1Opam2bETupIcPk8dWqQREi',
