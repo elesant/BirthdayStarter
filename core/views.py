@@ -1,7 +1,8 @@
 from core.models import OBUser, Present
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from core.forms import get_validation_errors, UserRegisterForm
-from core.utilities import build_response, prepare_response, get_domain
+from core.utilities import build_response, prepare_response, get_domain, get_facebook_friends
 import time
 from django.template import RequestContext
 from django.shortcuts import render_to_response
@@ -20,7 +21,7 @@ def facebook_login(request):
             'client_id': settings.FACEBOOK_APP_ID,
             'redirect_uri': get_domain(request) + '/',
             'response_type': 'code',
-            'scope': 'email',
+            'scope': 'email,user_birthday,friends_birthday',
         }
     )
     return HttpResponseRedirect(login_link)
@@ -55,6 +56,7 @@ def api_user_register(request):
 
 
 @csrf_exempt
+@login_required
 def api_present_parse(request):
     benchmark_start = time.time()
     response = prepare_response(request)
@@ -86,6 +88,23 @@ def api_present_parse(request):
         new_present.save()
         status = 201
     except KeyError:
+        status = 400
+    response['meta']['status'] = status
+    benchmark_end = time.time()
+    response['meta']['execution_time'] = benchmark_end - benchmark_start
+    return build_response(response, status=status)
+
+
+@csrf_exempt
+@login_required
+def api_friend_list(request):
+    benchmark_start = time.time()
+    response = prepare_response(request)
+    status = 200
+    try:
+        friend_list =  get_facebook_friends(request)['data']
+        response['friend_list'] = friend_list
+    except:
         status = 400
     response['meta']['status'] = status
     benchmark_end = time.time()

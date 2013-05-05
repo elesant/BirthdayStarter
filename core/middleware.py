@@ -81,6 +81,8 @@ class FacebookMiddleware(object):
         if oauth_code != '':
             token_url = self.build_token_url(oauth_code, redirect_uri)
             access_token, _ = self.get_access_token_expire(token_url)
+            # Store access token in session
+            request.session['facebook_access_token'] = access_token
             user_data = self.get_current_user_data(access_token)
             if user_data is not None:
                 if request.user.is_authenticated():

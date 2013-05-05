@@ -3,6 +3,7 @@ from django.http import HttpResponse
 import random
 from django.conf import settings
 from django.contrib.auth import load_backend, login
+import urllib
 
 
 # Status Codes: http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
@@ -61,3 +62,19 @@ def instant_login(request, user):
                 break
     if hasattr(user, 'backend'):
         return login(request, user)
+
+
+def get_facebook_friends(request):
+    try:
+        graph_url = 'https://graph.facebook.com/me/friends?' + urllib.urlencode(
+            {
+                'access_token': request.session['facebook_access_token'],
+                'fields': 'id,name,birthday',
+            }
+        )
+        conn = urllib.urlopen(graph_url)
+        resp = conn.read()
+        conn.close()
+        return simplejson.loads(resp)
+    except:
+        return None
