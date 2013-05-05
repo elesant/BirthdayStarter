@@ -30,5 +30,5 @@ FACEBOOK_APP_SECRET = 'a93c979b7d23272a7bcc793bf9daec02'
 
 # Set your DSN value
 RAVEN_CONFIG = {
-    'dsn': 'https://72751d7b7a174ea8932d0e6fb8f1e192:e17a9554929d4f92b966bbb4c0023e3c@app.getsentry.com/6931',
+    'dsn': 'https://ab1f113033a04d85985032a086338f25:0e5202a9000145d3b10cf7a8d7991a56@app.getsentry.com/8106',
 }

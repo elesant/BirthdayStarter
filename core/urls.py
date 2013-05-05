@@ -9,4 +9,5 @@ urlpatterns = patterns('core.views',
 
     # requires login
     url(r'^home/$', 'home'),
+    url(r'^api/present/parse/$', 'api_present_parse'),
 )

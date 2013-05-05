@@ -2,7 +2,7 @@ import urllib
 import urllib2
 import time
 
-from core.models import OBUser
+from core.models import OBUser, Present
 from django.views.decorators.csrf import csrf_exempt
 from core.forms import get_validation_errors, UserRegisterForm
 from core.utilities import build_response, prepare_response, get_domain
@@ -15,6 +15,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect
 from django.template import RequestContext, loader
+from bs4 import BeautifulSoup
+import urllib
 
 def facebook_login(request):
     # TODO: Add CSRF prevention
@@ -48,6 +50,44 @@ def api_user_register(request):
         status = 201
     else:
         response['errors'] = errors
+        status = 400
+    response['meta']['status'] = status
+    benchmark_end = time.time()
+    response['meta']['execution_time'] = benchmark_end - benchmark_start
+    return build_response(response, status=status)
+
+@csrf_exempt
+def api_present_parse(request):
+    benchmark_start = time.time()
+    response = prepare_response(request)
+    status = 200
+    try:
+        item_link = request.POST['item_link']
+        response['item_link'] = item_link
+        conn = urllib.urlopen(item_link)
+        page_response = conn.read()
+        conn.close()
+        soup = BeautifulSoup(page_response)
+        name = soup.find('span', {'id': 'btAsinTitle'}).find(text=True)
+        response['name'] = name
+        try:
+            image_link = soup.find('img', {'id': 'original-main-image'})['src']
+        except:
+            try:
+                image_link = soup.find('img', {'id': 'main-image'})['src']
+            except:
+                image_link = None
+        response['image_link'] = image_link
+        cost = float(soup.find('span', {'id': 'actualPriceValue'}).find(class_='priceLarge').find(text=True).split('$')[1])
+        response['cost'] = cost
+        new_present = Present()
+        new_present.item_link = item_link
+        new_present.image_link = image_link
+        new_present.name = name
+        new_present.cost = cost
+        new_present.save()
+        status = 201
+    except KeyError:
         status = 400
     response['meta']['status'] = status
     benchmark_end = time.time()

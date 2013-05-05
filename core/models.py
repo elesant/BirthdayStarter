@@ -7,7 +7,7 @@ class Present(models.Model):
 
     item_link = models.TextField(blank=True, null=True)
     name = models.CharField(max_length=500)
-    cost = models.PositiveIntegerField(default=0)
+    cost = models.FloatField(default=0.0)
     image_link = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
