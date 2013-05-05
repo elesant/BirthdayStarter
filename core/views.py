@@ -1,10 +1,11 @@
 import urllib
 import time
+import datetime
 from core.models import User, Present, Birthday, BirthdayContribution
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from core.forms import get_validation_errors, UserRegisterForm
-from core.utilities import build_response, prepare_response, get_domain, get_facebook_friends
+from core.utilities import build_response, prepare_response, get_domain, get_facebook_friends, get_facebook_user_data
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.conf import settings
@@ -53,7 +54,18 @@ def birthday_detail(request, birthday_id=None):
     else:
         tpl = loader.get_template('birthday.html')
         context = RequestContext(request)
-        context['birthday'] = Birthday.objects.get(id=birthday_id)
+        birthday = Birthday.objects.get(id=birthday_id)
+        context['birthday'] = birthday
+        context['facebook_user'] = get_facebook_user_data(request, birthday.facebook_id)
+        delta = birthday.birthday - datetime.date.today()
+        context['days_left'] = delta.days
+
+        contributions = BirthdayContribution.objects.filter(birthday=birthday).count()
+        pleged_percentage = int(birthday.amount_raised / (birthday.amount_target or 1) * 100)
+        context['percentage'] = pleged_percentage
+        context['num_contributions'] = contributions
+        context['amount_raised'] = birthday.amount_raised
+        context['amount_target'] = birthday.amount_target
         return HttpResponse(tpl.render(context))
 
 @csrf_exempt

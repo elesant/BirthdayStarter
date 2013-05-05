@@ -11,37 +11,37 @@
       <div class="birthday-user-info">
         <div class="row">
           <div class="span2">
-            <img src="https://graph.facebook.com/{{ user.facebook_id }}/picture?type=large&amp;width=180&amp;height=180">
+            <img class="birthday-facebook-image" src="https://graph.facebook.com/{{ facebook_user.id }}/picture?type=large&amp;width=180&amp;height=180">
           </div>
           <div class="span6">
             <div class="birthday-user-text">
               <p class="birthday-name-paragraph">
-                Michael Chiang
+                {{ facebook_user.name }}
               </p>
               <p class="birthday-name-paragraph">
-                &nbsp;(May 20, 2013)
+                &nbsp;({{ birthday.birthday }})
               </p>
             </div>
             <br>
             <div class="birthday-completion-data">
-              2 days until Michael's birthday
+              {{ days_left }} days until Michael's birthday
               <div class="birthday-progress progress progress-danger">
-                <div class="bar" style="width: 20%"></div>
+                <div class="bar" style="width: {{ percentage }}%"></div>
                 <div class="birthday-contributions-info">
-                  10 Contributions
+                  {{ num_contributions }} Contributions
                 </div>
               </div>
             </div>
             <div class="birthday-completion-stats">
               <div class="row">
                 <div class="span2 birthday-funded-info">
-                  10%<br>Funded
+                  {{ percentage }}%<br>Funded
                 </div>
                 <div class="span2 birthday-contributed-info">
-                  10%<br>Funded
+                  ${{ amount_raised }}<br>Funded
                 </div>
                 <div class="span2">
-                  $10<br>Required
+                  ${{ amount_target }}<br>Required
                 </div>
               </div>
             </div>
@@ -56,6 +56,7 @@
   <div id="birthday-gift-ideas">
 
   </div>
+  <input id="input-parse-link" type="text" placeholder="Paste Item URL Here...">
 </div>
 
 {% verbatim %}
@@ -65,6 +66,24 @@
 
 {% compress js %}
 <script src="{{ STATIC_URL }}js/birthday.js"></script>
+<script>
+$('#input-parse-link').change(function() {
+  $.ajax({
+    type: 'POST',
+    url: '/api/present/parse/',
+    data: {
+      'birthday_id': {{ birthday.id }},
+      'item_link': $(this).val(),
+    },
+    success: function(data){
+      $('#item-panel').html('');
+      $('#item-panel').append(data['name'] + '<br />');
+      $('#item-panel').append('$' + data['cost'] + '<br />');
+      $('#item-panel').append('<img src="' + data['image_link'] + '"><br />');
+    }
+  });
+});
+</script>
 {% endcompress %}
 
 {% endblock %}

@@ -1,4 +1,4 @@
-$(document).ready(function() {
+/*$(document).ready(function() {
   // Events for clicking
 
   var $container = $('#birthday-container');
@@ -11,4 +11,4 @@ $(document).ready(function() {
       });
     });
   });
-});
+});*/

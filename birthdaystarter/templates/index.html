@@ -31,29 +31,13 @@
 
 <script>
 
-$('#input-parse-link').change(function() {
-  $.ajax({
-    type: 'POST',
-    url: '/api/present/parse/',
-    data: {
-      'item_link': $(this).val(),
-    },
-    success: function(data){
-      $('#item-panel').html('');
-      $('#item-panel').append(data['name'] + '<br />');
-      $('#item-panel').append('$' + data['cost'] + '<br />');
-      $('#item-panel').append('<img src="' + data['image_link'] + '"><br />');
-    }
-  });
-});
-
 $('#btn-get-friend-list').click(function() {
   $.ajax({
     type: 'POST',
     url: '/api/friend/list/',
     success: function(data){
     	for (var i=0; i < data['friend_list'].length; i++)
-		{ 
+		{
 			$('#friend-list').append(data['friend_list'][i]['name'] + '<br />');
 		}
     }
