@@ -44,11 +44,10 @@ def birthday_detail(request, birthday_id=None):
             birthday = parse(datestr, fuzzy=True)
             try:
                 birthday_entity = Birthday.objects.get(facebook_id=facebook_id, birthday=birthday)
-                return HttpResponseRedirect('/birthday/%s' % birthday_entity.id)
             except Birthday.DoesNotExist:
                 birthday_entity = Birthday(facebook_id=facebook_id, birthday=birthday)
                 birthday_entity.save()
-            return HttpResponse('NEW BIRTHDAY!')
+            return HttpResponseRedirect('/birthday/%s' % birthday_entity.id)
         else:
             return HttpResponse('NO GET ARGS!')
     else:
