@@ -80,6 +80,9 @@
   </div>
 </div>
 
+<div id='messagesDiv'></div>
+<input type='text' id='messageInput' placeholder='Message...'>
+
 {% verbatim %}
 <script id="product-box-template" type="text/x-handlebars-template">
 </script>
@@ -126,7 +129,29 @@ $('#btn-contribute').click(function() {
     }
   });
 });
+
+var discussionRef = new Firebase('https://giftly.firebaseio.com/discussion/{{ birthday.id }}');
+
+$('#messageInput').keypress(function (e) {
+  if (e.keyCode == 13) {
+    var name = '{{ user.display_name }}';
+    var facebook_id = '{{ user.facebook_id }}';
+    var text = $('#messageInput').val();
+    discussionRef.push({name:name, facebook_id:facebook_id, text:text});
+    $('#messageInput').val('');
+  }
+});
+
+// Add a callback that is triggered for each chat message.
+discussionRef.limit(10).on('child_added', function (snapshot) {
+  var message = snapshot.val();
+  var message_display = '<div><a href="https://www.facebook.com/' + message.facebook_id + '">' + message.name + '</a>: ' + message.text + '</div>';
+  $('#messagesDiv').prepend(message_display);
+  $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
+});
+
 </script>
+
 {% endcompress %}
 
 {% endblock %}
