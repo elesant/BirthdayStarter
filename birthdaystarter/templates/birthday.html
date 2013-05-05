@@ -24,7 +24,7 @@
             </div>
             <br>
             <div class="birthday-completion-data">
-              {{ days_left }} days until {{ facebook_user.first_name }}'s birthday
+              <h6 style="color: #888;">{{ days_left }} days until {{ facebook_user.first_name }}'s birthday</h6>
               <div class="birthday-progress progress progress-danger">
                 <div class="bar" style="width: {{ percentage }}%"></div>
                 <div class="birthday-contributions-info">
@@ -35,13 +35,13 @@
             <div class="birthday-completion-stats">
               <div class="row">
                 <div class="span2 birthday-funded-info">
-                  {{ percentage }}%<br>Funded
+                  <h3>{{ percentage }}%</h3><span style="position: relative; top: -10px;">Funded</span>
                 </div>
                 <div class="span2 birthday-contributed-info">
-                  ${{ amount_raised }}<br>Funded
+                  <h3>${{ amount_raised }}</h3><span style="position: relative; top: -10px;">Raised</span>
                 </div>
                 <div class="span2">
-                  ${{ amount_target }}<br>Required
+                  <h3>${{ amount_target }}</h3><span style="position: relative; top: -10px;">Required</span>
                 </div>
               </div>
             </div>
