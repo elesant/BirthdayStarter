@@ -77,6 +77,7 @@ $(document).ready(function() {
         'picture_url': photoUrls[index],
         'birthday_url': '/birthday?facebook_id=' + element['id'] + '&datestr=' + element['birthday'].toString(),
         'bar_display': element['bar_display'],
+        'num_contributions': element['num_contributions']
       };
       var html = birthdayBoxTemplate(context);
       $container.append(html);

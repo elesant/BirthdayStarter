@@ -51,7 +51,10 @@ def birthday_detail(request, birthday_id=None):
         else:
             return HttpResponse('NO GET ARGS!')
     else:
-        return HttpResponse('WITH ID!')
+        tpl = loader.get_template('birthday.html')
+        context = RequestContext(request)
+        context['birthday'] = Birthday.objects.get(id=birthday_id)
+        return HttpResponse(tpl.render(context))
 
 @csrf_exempt
 def api_user_register(request):
@@ -152,15 +155,21 @@ def api_friend_list(request):
         for datum in response['friend_list']:
             facebook_id = datum['id']
             if facebook_id in friend_list_data.keys():
+                contributions = BirthdayContribution.objects.filter(birthday=friend_list_data[facebook_id]).count()
                 pleged_percentage = int(friend_list_data[facebook_id].amount_raised / (friend_list_data[facebook_id].amount_target or 1) * 100)
                 datum['bar_display'] = '<div class="bar" style="width: {0}%"></div>'.format(pleged_percentage)
+                datum['num_contributions'] = contributions
             else:
                 datum['bar_display'] = ''
+                datum['num_contributions'] = 0
     except KeyError:
         status = 400
     response['meta']['status'] = status
     benchmark_end = time.time()
     response['meta']['execution_time'] = benchmark_end - benchmark_start
+
+    # add number of contributions
+
     return build_response(response, status=status)
 
 @csrf_exempt
@@ -237,7 +246,3 @@ def home(request):
     tpl = loader.get_template('home.html')
     return HttpResponse(tpl.render(RequestContext(request, {})))
 
-@login_required
-def birthday(request):
-    tpl = loader.get_template('birthday.html')
-    return HttpResponse(tpl.render(RequestContext(request, {})))

@@ -64,6 +64,10 @@
   font-size: 24px;
   font-weight: bold;
   display: none;
+
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
 }
 
 .birthday-date-box {

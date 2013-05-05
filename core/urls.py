@@ -11,7 +11,6 @@ urlpatterns = patterns('core.views',
 
     # requires login
     url(r'^home/$', 'home'),
-    url(r'^birthday/$', 'birthday'),
     url(r'^api/present/parse/$', 'api_present_parse'),
     url(r'^api/friend/list/$', 'api_friend_list'),
     url(r'^api/birthday/join/$', 'api_birthday_join'),
