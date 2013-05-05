@@ -4,8 +4,8 @@ ENVIRONMENT = 'PROD'
 
 ALLOWED_HOSTS = [
     'birthdaystarter.herokuapp.com',
-    'birthdaystarter.com',
-    'www.birthdaystarter.com',
+    'giftly.ca',
+    'www.giftly.com',
 ]
 
 DEBUG = False
