@@ -53,7 +53,7 @@
       <ul class="nav nav-list">
         <li class="nav-header">Contributors</li>
         {% for contribution in contributions %}
-          <li class=""><a href="https://wwww.facebook.com/{{ contribution.contributor.facebook_id }}">{{ contribution.contributor.display_name }}</a> ${{ contribution.amount }}</li>
+          <li class=""><a class="user-name" href="https://wwww.facebook.com/{{ contribution.contributor.facebook_id }}">{{ contribution.contributor.display_name }}</a> ${{ contribution.amount }}</li>
           {% endfor %}
           {% if num_contributions == 0 %}
           <li class="">No contributors</li>
@@ -203,7 +203,7 @@ $('#messageInput').keypress(function (e) {
 // Add a callback that is triggered for each chat message.
 discussionRef.limit(10).on('child_added', function (snapshot) {
   var message = snapshot.val();
-  var message_display = '<div><a href="https://www.facebook.com/' + message.facebook_id + '">' + message.name + '</a>: ' + message.text + '</div>';
+  var message_display = '<div><a class="user-name" href="https://www.facebook.com/' + message.facebook_id + '">' + message.name + '</a>: ' + message.text + '</div>';
   $('#messagesDiv').prepend(message_display);
   var messagesDiv = document.getElementById('messagesDiv');
   messagesDiv.scrollTop = 0;
