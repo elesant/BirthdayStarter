@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import urllib
 import time
 
