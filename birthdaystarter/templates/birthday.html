@@ -1,7 +1,7 @@
 {% extends "base_app.html" %}
 {% load compress %}
 
-{% block title %}Birthday Starter{% endblock %}
+{% block title %}Giftly{% endblock %}
 
 {% block content %}
 
@@ -28,7 +28,7 @@
               <div class="birthday-progress progress {{ progress_bar_class }}">
                 <div class="bar" style="width: {{ percentage }}%"></div>
                 <div class="birthday-contributions-info">
-                  {{ num_contributions }} Contributions
+                  {{ num_contributions }} Contributors
                 </div>
               </div>
             </div>
@@ -118,12 +118,12 @@
             });
           </script>
         </div>
-        {% endif %}
         <div class="birthday-price-well well">
           <label><strong>Suggest a Gift:</strong></label>
           <input id="input-parse-link" type="text" placeholder="http://amazon.com/...">
           <button id="btn-suggest-gift" class="btn btn-success">Suggest</button>
         </div>
+        {% endif %}
         <div class="discussion-well well">
           <label style="text-align: center;"><strong>Discussion:</strong></label>
           {% if in_discussion %}

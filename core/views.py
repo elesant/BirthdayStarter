@@ -147,7 +147,7 @@ def api_present_parse(request):
                     except:
                         image_link = None
                 response['image_link'] = image_link
-                cost = float(soup.find('span', {'id': 'actualPriceValue'}).find(class_='priceLarge').find(text=True).split('$')[1])
+                cost = float(soup.find('span', {'id': 'actualPriceValue'}).find(class_='priceLarge').find(text=True).split('$')[1].replace(',', ''))
                 response['cost'] = cost
                 new_present = Present()
                 new_present.item_link = item_link
