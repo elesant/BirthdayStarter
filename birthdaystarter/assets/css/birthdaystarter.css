@@ -15,7 +15,21 @@
   margin: 0 auto;
 }
 
-.birthday-listing {
+.birthday-contributions {
+  width: 95%;
+  text-align: center;
+  position: absolute;
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: bold;
+  padding-top: 5px;
+  color: black;
+  text-shadow: 0 1px #ccc;
+}
+
+.birthday-badge {
+  top: 0;
+  position: absolute;
 }
 
 .birthday-box {

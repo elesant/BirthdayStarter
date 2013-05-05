@@ -1,4 +1,6 @@
 $(document).ready(function() {
+  // Events for clicking
+
   var $container = $('#birthday-container');
 
   var monthMap = {
@@ -30,19 +32,21 @@ $(document).ready(function() {
       var date = new Date(element['birthday']);
 
       var normalizedCurrentDate = new Date(currentDate);
-      normalizedCurrentDate.setYear(0);
+      normalizedCurrentDate.setFullYear(0);
 
       var normalizedDate = new Date(date);
-      normalizedDate.setYear(0);
+      normalizedDate.setFullYear(0);
 
       if (normalizedDate > normalizedCurrentDate) {
-        date.setYear(currentDate.getYear());
+        date.setYear(currentDate.getFullYear());
       } else {
-        date.setYear(currentDate.getYear() + 1);
+        date.setYear(currentDate.getFullYear() + 1);
       }
 
       element['birthday'] = date;
     });
+
+    console.log(friendsList);
 
     friendsList.sort(function(a, b) {
       return a['birthday'] - b['birthday'];
@@ -74,7 +78,8 @@ $(document).ready(function() {
         'birthday': dateStrings[index],
         'id': element['id'],
         'profile_url': 'https://facebook.com/' + element['id'],
-        'picture_url': photoUrls[index]
+        'picture_url': photoUrls[index],
+        'birthday_url': '/birthday?facebook_id=' + element['id'] + '&datestr=' + element['birthday'].toString()
       };
       var html = birthdayBoxTemplate(context);
       $container.append(html);
