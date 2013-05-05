@@ -25,7 +25,7 @@
             <br>
             <div class="birthday-completion-data">
               <h6 style="color: #888;">{{ days_left }} days until {{ facebook_user.first_name }}'s birthday</h6>
-              <div class="birthday-progress progress progress-danger">
+              <div class="birthday-progress progress {{ progress_bar_class }}">
                 <div class="bar" style="width: {{ percentage }}%"></div>
                 <div class="birthday-contributions-info">
                   {{ num_contributions }} Contributions

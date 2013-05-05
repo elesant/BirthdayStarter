@@ -74,6 +74,14 @@ def birthday_detail(request, birthday_id=None):
         except BirthdayContribution.DoesNotExist:
             in_discussion = False
         context['in_discussion'] = in_discussion
+        progress_bar_class = ''
+        if pleged_percentage <= 25:
+            progress_bar_class = 'progress-danger'
+        elif pleged_percentage > 25 and pleged_percentage <= 75:
+            progress_bar_class = 'progress-warning'
+        elif pleged_percentage > 75:
+            progress_bar_class = 'progress-success'
+        context['progress_bar_class'] = progress_bar_class
         print in_discussion
         return HttpResponse(tpl.render(context))
 
@@ -179,7 +187,14 @@ def api_friend_list(request):
             if facebook_id in friend_list_data.keys():
                 contributions = BirthdayContribution.objects.filter(birthday=friend_list_data[facebook_id]).count()
                 pleged_percentage = int(friend_list_data[facebook_id].amount_raised / (friend_list_data[facebook_id].amount_target or 1) * 100)
-                datum['bar_display'] = '<div class="bar" style="width: {0}%"></div>'.format(pleged_percentage)
+                progress_bar_class = ''
+                if pleged_percentage <= 25:
+                    progress_bar_class = 'bar-danger'
+                elif pleged_percentage > 25 and pleged_percentage <= 75:
+                    progress_bar_class = 'bar-warning'
+                elif pleged_percentage > 75:
+                    progress_bar_class = 'bar-success'
+                datum['bar_display'] = '<div class="bar {0}" style="width: {1}%"></div>'.format(progress_bar_class, pleged_percentage)
                 datum['num_contributions'] = contributions
             else:
                 datum['bar_display'] = ''
