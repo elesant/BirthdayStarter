@@ -78,5 +78,19 @@ def get_facebook_friends(request):
     except:
         return None
 
+def get_facebook_user_data(request, facebook_id):
+    try:
+        graph_url = 'https://graph.facebook.com/' + facebook_id + '?' + urllib.urlencode(
+            {
+                'access_token': request.session['facebook_access_token'],
+            }
+        )
+        conn = urllib.urlopen(graph_url)
+        resp = conn.read()
+        conn.close()
+        return simplejson.loads(resp)
+    except:
+        return None
+
 def get_facebook_image(request):
     facebook_id = request.GET.get('facebook_id', )
