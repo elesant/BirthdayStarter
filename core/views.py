@@ -1,4 +1,4 @@
-from core.models import User, Present
+from core.models import User, Present, Birthday, BirthdayContribution
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from core.forms import get_validation_errors, UserRegisterForm
@@ -106,6 +106,38 @@ def api_friend_list(request):
         response['friend_list'] = friend_list
     except:
         status = 400
+    response['meta']['status'] = status
+    benchmark_end = time.time()
+    response['meta']['execution_time'] = benchmark_end - benchmark_start
+    return build_response(response, status=status)
+
+
+@csrf_exempt
+@login_required
+def api_birthday_join(request):
+    benchmark_start = time.time()
+    response = prepare_response(request)
+    status = 200
+    birthday_id = request.POST['birthday_id']
+    if birthday_id:
+        try:
+            birthday = Birthday.objects.get(id=birthday_id)
+            response['birthday_id'] = birthday_id
+            contribution = BirthdayContribution()
+            contribution.birthday = birthday
+            contribution.contributor = request.user
+            contribution.save()
+            response['birthday_contribution_id'] = contribution.id
+            status = 201
+        except Birthday.DoesNotExist:
+            status = 404
+    else:
+        facebook_id = request.POST['facebook_id']
+        birthday_date = request.POST['birthday']
+        birthday = Birthday(facebook_id=facebook_id, birthday=birthday_date)
+        birthday.save()
+        response['birthday_id'] = birthday.id
+        status = 201
     response['meta']['status'] = status
     benchmark_end = time.time()
     response['meta']['execution_time'] = benchmark_end - benchmark_start
