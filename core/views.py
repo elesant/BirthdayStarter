@@ -200,6 +200,10 @@ def index(request):
 
 @login_required
 def home(request):
-
     tpl = loader.get_template('home.html')
+    return HttpResponse(tpl.render(RequestContext(request, {})))
+
+@login_required
+def birthday(request):
+    tpl = loader.get_template('birthday.html')
     return HttpResponse(tpl.render(RequestContext(request, {})))

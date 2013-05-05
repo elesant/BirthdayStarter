@@ -53,6 +53,19 @@
   position: relative;
 }
 
+.birthday-portrait-overlay {
+  position: absolute;
+  width: 180px;
+  height: 86px;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  text-align: center;
+  padding-top: 60px;
+  font-size: 24px;
+  font-weight: bold;
+  display: none;
+}
+
 .birthday-date-box {
   position: absolute;
   bottom: 0;
@@ -77,6 +90,63 @@
 
 .birthday-progress {
   margin-top: 5px;
-
   margin-bottom: 10px;
+}
+
+.birthday-user-info {
+  background-color: #eee;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.birthday-user-info img {
+  padding: 10px;
+}
+
+.birthday-user-text {
+  width: 100%;
+  padding-top: 5px;
+  display: block;
+  height: 16px;
+}
+
+.birthday-name-paragraph {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 284px;
+  margin-bottom: 0;
+  float: left;
+}
+
+.birthday-completion-data {
+  margin-right: 10px;
+}
+
+.birthday-contributions-info {
+  text-align: left;
+  padding-left: 180px;
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: bold;
+  padding-top: 5px;
+  color: black;
+  text-shadow: 0 1px #ccc;
+}
+
+.birthday-completion-stats {
+  text-align: center;
+}
+
+.birthday-funded-info {
+  border-right: 1px solid #444;
+}
+
+.birthday-contributed-info {
+  border-right: 1px solid #444;
+  margin-left: 0;
 }

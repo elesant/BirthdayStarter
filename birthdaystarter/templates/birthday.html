@@ -1,0 +1,70 @@
+{% extends "base_app.html" %}
+{% load compress %}
+
+{% block title %}Birthday Starter{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="span8">
+      <div class="birthday-user-info">
+        <div class="row">
+          <div class="span2">
+            <img src="https://graph.facebook.com/{{ user.facebook_id }}/picture?type=large&amp;width=180&amp;height=180">
+          </div>
+          <div class="span6">
+            <div class="birthday-user-text">
+              <p class="birthday-name-paragraph">
+                Michael Chiang
+              </p>
+              <p class="birthday-name-paragraph">
+                &nbsp;(May 20, 2013)
+              </p>
+            </div>
+            <br>
+            <div class="birthday-completion-data">
+              2 days until Michael's birthday
+              <div class="birthday-progress progress progress-danger">
+                <div class="bar" style="width: 20%"></div>
+                <div class="birthday-contributions-info">
+                  10 Contributions
+                </div>
+              </div>
+            </div>
+            <div class="birthday-completion-stats">
+              <div class="row">
+                <div class="span2 birthday-funded-info">
+                  10%<br>Funded
+                </div>
+                <div class="span2 birthday-contributed-info">
+                  10%<br>Funded
+                </div>
+                <div class="span2">
+                  $10<br>Required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="span4">
+      Contributors
+    </div>
+  </div>
+  <div id="birthday-gift-ideas">
+
+  </div>
+</div>
+
+{% verbatim %}
+<script id="product-box-template" type="text/x-handlebars-template">
+</script>
+{% endverbatim %}
+
+{% compress js %}
+<script src="{{ STATIC_URL }}js/birthday.js"></script>
+{% endcompress %}
+
+{% endblock %}

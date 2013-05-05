@@ -1,10 +1,6 @@
 $(document).ready(function() {
   // Events for clicking
 
-  $('.birthday-picture').on('hover', function(event) {
-    
-  });
-
   var $container = $('#birthday-container');
 
   var monthMap = {
@@ -50,13 +46,9 @@ $(document).ready(function() {
       element['birthday'] = date;
     });
 
-    console.log(friendsList);
-
     friendsList.sort(function(a, b) {
       return a['birthday'] - b['birthday'];
     });
-
-    console.log(friendsList);
 
     photoUrls = friendsList.map(function(element, index, array) {
       return 'https://graph.facebook.com/' + element['id'] + '/picture?type=large&width=205&height=205';
@@ -90,6 +82,12 @@ $(document).ready(function() {
     });
 
     $container.imagesLoaded(function(){
+      $('.birthday-portrait').on('mouseenter', function(event) {
+        $(this).find('.birthday-portrait-overlay').show();
+      });
+      $('.birthday-portrait').on('mouseleave', function(event) {
+        $(this).find('.birthday-portrait-overlay').hide();
+      });
       $container.masonry({
         itemSelector : '.birthday-box',
         gutterWidth: 10,

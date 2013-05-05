@@ -1,4 +1,5 @@
 {% extends "base_app.html" %}
+{% load compress %}
 
 {% block title %}Birthday Starter{% endblock %}
 
@@ -20,6 +21,9 @@
 <div class="birthday-box">
   <div class="birthday-portrait">
     <a href="{{ birthday_url }}">
+      <div class="birthday-portrait-overlay">
+      Contribute
+      </div>
       <img class="birthday-picture" src="{{ picture_url }}">
     </a>
     <div class="birthday-date-box">
@@ -38,5 +42,9 @@
 </div>
 </script>
 {% endverbatim %}
+
+{% compress js %}
+<script src="{{ STATIC_URL }}js/home.js"></script>
+{% endcompress %}
 
 {% endblock %}
