@@ -72,6 +72,7 @@ class Birthday(models.Model):
 
     class Meta:
         db_table = 'table_birthday'
+        unique_together = ('facebook_id', 'birthday')
 
 
 class Present(models.Model):
