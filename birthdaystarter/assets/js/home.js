@@ -1,6 +1,10 @@
 $(document).ready(function() {
   // Events for clicking
 
+  $('.birthday-picture').on('hover', function(event) {
+    
+  });
+
   var $container = $('#birthday-container');
 
   var monthMap = {
