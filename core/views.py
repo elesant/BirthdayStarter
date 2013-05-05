@@ -142,7 +142,21 @@ def api_friend_list(request):
     try:
         friend_list =  get_facebook_friends(request)['data']
         response['friend_list'] = friend_list
-    except:
+        friend_list_ids = []
+        for datum in response['friend_list']:
+            friend_list_ids.append(datum['id'])
+        birthdays = Birthday.objects.filter(facebook_id__in=friend_list_ids)
+        friend_list_data = {}
+        for datum in birthdays:
+            friend_list_data[datum.facebook_id] = datum
+        for datum in response['friend_list']:
+            facebook_id = datum['id']
+            if facebook_id in friend_list_data.keys():
+                pleged_percentage = int(friend_list_data[facebook_id].amount_raised / (friend_list_data[facebook_id].amount_target or 1) * 100)
+                datum['bar_display'] = '<div class="bar" style="width: {0}%"></div>'.format(pleged_percentage)
+            else:
+                datum['bar_display'] = ''
+    except KeyError:
         status = 400
     response['meta']['status'] = status
     benchmark_end = time.time()

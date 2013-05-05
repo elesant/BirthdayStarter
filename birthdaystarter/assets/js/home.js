@@ -75,7 +75,8 @@ $(document).ready(function() {
         'id': element['id'],
         'profile_url': 'https://facebook.com/' + element['id'],
         'picture_url': photoUrls[index],
-        'birthday_url': '/birthday?facebook_id=' + element['id'] + '&datestr=' + element['birthday'].toString()
+        'birthday_url': '/birthday?facebook_id=' + element['id'] + '&datestr=' + element['birthday'].toString(),
+        'bar_display': element['bar_display'],
       };
       var html = birthdayBoxTemplate(context);
       $container.append(html);
