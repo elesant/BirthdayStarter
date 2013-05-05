@@ -159,3 +159,19 @@
   border-right: 1px solid #444;
   margin-left: 0;
 }
+
+.birthday-gift-ideas {
+  height: 500px;
+}
+
+.birthday-contributors {
+  padding-bottom: 20px;
+}
+
+.birthday-mid-row {
+  margin-top: 20px;
+}
+
+.birthday-price-well {
+  text-align: center;
+}

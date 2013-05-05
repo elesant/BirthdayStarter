@@ -50,13 +50,57 @@
       </div>
     </div>
     <div class="span4">
-      Contributors
+      <ul class="nav nav-list">
+        <li class="nav-header">Contributors</li>
+        <li class=""><a href="https://facebook.com/jeff">Jeff Morgan</a></li>
+        <li class=""><a href="https://facebook.com/jeff">Jeff Morgan</a></li>
+        <li class=""><a href="https://facebook.com/jeff">Jeff Morgan</a></li>
+        <li class=""><a href="https://facebook.com/jeff">Jeff Morgan</a></li>
+      </ul>
     </div>
   </div>
   <div id="birthday-gift-ideas">
 
   </div>
-  <input id="input-parse-link" type="text" placeholder="Paste Item URL Here...">
+  <div class="birthday-mid-row row">
+    <div class="span8">
+    </div>
+    <div class="span4">
+      <div class="birthday-price-well well">
+          <label><strong>Recommended Amount: $20</strong></label>
+          <input type="text" placeholder="Amount to Contribute">
+          <script src="https://checkout.stripe.com/v2/checkout.js"></script>
+          <button id="customButton" class="btn btn-primary">Contribute</button>
+
+          <script>
+            $('#customButton').click(function(){
+              var token = function(res){
+                var $input = $('<input type=hidden name=stripeToken />').val(res.id);
+                $('form').append($input).submit();
+              };
+
+              StripeCheckout.open({
+                key:         'pk_test_g1Opam2bETupIcPk8dWqQREi',
+                address:     true,
+                amount:      5000,
+                name:        'Joes Pistachios',
+                description: 'A bag of Pistachios',
+                panelLabel:  'Checkout',
+                token:       token
+              });
+
+              return false;
+            });
+          </script>
+        </div>
+        <div class="birthday-price-well well">
+          <label><strong>Suggest a Product:</strong></label>
+          <input type="text" placeholder="http://amazon.com/...">
+          <button id="button" class="btn btn-success">Suggest</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% verbatim %}
