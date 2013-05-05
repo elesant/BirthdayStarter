@@ -1,6 +1,5 @@
 import urllib
 import time
-
 from core.models import User, Present, Birthday, BirthdayContribution
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -9,13 +8,16 @@ from core.utilities import build_response, prepare_response, get_domain, get_fac
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.conf import settings
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect
 from django.template import RequestContext, loader
 from bs4 import BeautifulSoup
+from dateutil.parser import parse
+from django.utils import timezone
+
 
 def facebook_login(request):
     # TODO: Add CSRF prevention
@@ -32,6 +34,25 @@ def facebook_login(request):
 def signout(request):
     auth.logout(request)
     return HttpResponseRedirect('/')
+
+@login_required
+def birthday_detail(request, birthday_id=None):
+    if birthday_id is None:
+        facebook_id = request.GET.get('facebook_id', None)
+        datestr = request.GET.get('datestr', None)
+        if facebook_id is not None and datestr is not None:
+            birthday = parse(datestr, fuzzy=True)
+            try:
+                birthday_entity = Birthday.objects.get(facebook_id=facebook_id, birthday=birthday)
+                return HttpResponseRedirect('/birthday/%s' % birthday_entity.id)
+            except Birthday.DoesNotExist:
+                birthday_entity = Birthday(facebook_id=facebook_id, birthday=birthday)
+                birthday_entity.save()
+            return HttpResponse('NEW BIRTHDAY!')
+        else:
+            return HttpResponse('NO GET ARGS!')
+    else:
+        return HttpResponse('WITH ID!')
 
 @csrf_exempt
 def api_user_register(request):
