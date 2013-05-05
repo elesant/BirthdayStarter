@@ -3,21 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django.utils import timezone
 
 
-class Present(models.Model):
-
-    item_link = models.TextField(blank=True, null=True)
-    name = models.CharField(max_length=500)
-    cost = models.FloatField(default=0.0)
-    image_link = models.TextField(blank=True, null=True)
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        db_table = 'table_present'
-
-
-class OBUserManager(BaseUserManager):
+class CustomUserManager(BaseUserManager):
 
     def create_user(self, email=None, password=None, **extra_fields):
         now = timezone.now()
@@ -38,7 +24,7 @@ class OBUserManager(BaseUserManager):
         return user
 
 
-class OBUser(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField('e-mail address', max_length=200, unique=True, db_index=True)
     is_staff = models.BooleanField('staff status', default=False,
@@ -58,10 +44,62 @@ class OBUser(AbstractBaseUser, PermissionsMixin):
     def get_short_name(self):
         return self.email
 
-    objects = OBUserManager()
+    objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
 
     class Meta:
         db_table = 'table_user'
         verbose_name = 'User'
+
+
+class Birthday(models.Model):
+
+    facebook_id = models.CharField(max_length=200)
+    birthday = models.DateField()
+    amount_raised = models.FloatField(default=0.0)
+    amount_target = models.FloatField(default=0.0)
+    shipping_address = models.TextField(blank=True, null=True)
+    shipping_province_state = models.CharField(max_length=200, blank=True, null=True)
+    shipping_country = models.CharField(max_length=200, blank=True, null=True)
+    shipping_postal_code = models.CharField(max_length=100, blank=True, null=True)
+    shipping_phone = models.CharField(max_length=100, blank=True, null=True)
+    time_created = models.DateTimeField(auto_now_add=True)
+    time_modified = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return '%s - %s' % (self.facebook_id, self.birthday)
+
+    class Meta:
+        db_table = 'table_birthday'
+
+
+class Present(models.Model):
+
+    item_link = models.TextField(blank=True, null=True)
+    asn = models.CharField(max_length=200, blank=True, null=True)
+    name = models.CharField(max_length=500)
+    cost = models.FloatField(default=0.0)
+    image_link = models.TextField(blank=True, null=True)
+    birthday = models.ForeignKey(Birthday, blank=True, null=True)
+
+    def __unicode__(self):
+        return '%s -> %s' % (self.name, self.birthday)
+
+    class Meta:
+        db_table = 'table_present'
+
+
+class BirthdayContribution(models.Model):
+
+    birthday = models.ForeignKey(Birthday, related_name='%(class)s_birthday')
+    contributor = models.ForeignKey(User, related_name='%(class)s_contributor')
+    amount = models.FloatField(default=0.0)
+    time_created = models.DateTimeField(auto_now_add=True)
+    time_modified = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return '%s -> %s [%s]' % (self.birthday.id, self.contributor.id, self.amount)
+
+    class Meta:
+        db_table = 'table_birthday_contribution'

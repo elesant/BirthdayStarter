@@ -11,4 +11,6 @@ urlpatterns = patterns('core.views',
     url(r'^home/$', 'home'),
     url(r'^api/present/parse/$', 'api_present_parse'),
     url(r'^api/friend/list/$', 'api_friend_list'),
+    url(r'^api/birthday/join/$', 'api_birthday_join'),
+    url(r'^api/birthday/pay/$', 'api_birthday_pay'),
 )

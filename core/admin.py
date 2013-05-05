@@ -1,9 +1,21 @@
 from django.contrib import admin
-from core.models import OBUser, Present
+from core.models import User, Present, Birthday, BirthdayContribution
 from django.contrib.sessions.models import Session
 
 
-class OBUserAdmin(admin.ModelAdmin):
+class BirthdayContributionInline(admin.StackedInline):
+    model = BirthdayContribution
+    extra = 0
+
+
+class BirthdayAdmin(admin.ModelAdmin):
+    inlines = [BirthdayContributionInline]
+    list_display = ('facebook_id', 'birthday', 'amount_raised', 'amount_target', 'time_modified',)
+    search_fields = ['facebook_id']
+    list_filter = ('time_created', 'time_modified',)
+
+
+class UserAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
@@ -24,6 +36,8 @@ class OBUserAdmin(admin.ModelAdmin):
     filter_horizontal = ['groups', 'user_permissions']
 
 
-admin.site.register(OBUser, OBUserAdmin)
+admin.site.register(User, UserAdmin)
 admin.site.register(Present)
+admin.site.register(Birthday, BirthdayAdmin)
+admin.site.register(BirthdayContribution)
 admin.site.register(Session)
